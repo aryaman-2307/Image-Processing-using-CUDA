@@ -2,7 +2,6 @@
 
 #include <cuda_runtime.h>
 #include <nppi_filtering_functions.h>
-#include <dirent.h>
 #include <sys/stat.h>
 
 #define STB_IMAGE_IMPLEMENTATION
