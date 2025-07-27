@@ -1,9 +1,8 @@
 <#
-Downloads the USC‑SIPI Textures volume (155 images, 30 MB),
+Downloads the USC‑SIPI Textures volume (155 PNGs, ~30 MB),
 extracts it to data\sample_images\ and deletes the zip.
 
-If sipi.usc.edu is unreachable, it automatically falls back to
-a GitHub mirror that contains the same 155 PNGs.
+If sipi.usc.edu is offline it falls back to a public GitHub mirror.
 #>
 
 param(
@@ -34,15 +33,11 @@ catch {
 Write-Host "→ Extracting ..."
 Expand-Archive -Path $zipPath -DestinationPath $Dest -Force
 
-# The GitHub mirror puts images under an extra folder;
-# move *.png up one level if necessary.
+# If mirror adds an extra folder level, flatten it
 Get-ChildItem -Path $Dest -Recurse -Filter *.png |
-    ForEach-Object {
-        if ($_.Directory.FullName -ne (Resolve-Path $Dest).Path) {
-            Move-Item $_.FullName $Dest
-        }
-    }
+    Where-Object { $_.Directory.FullName -ne (Resolve-Path $Dest).Path } |
+    ForEach-Object { Move-Item $_.FullName $Dest }
 
 Remove-Item $zipPath
 $cnt = (Get-ChildItem $Dest -Filter *.png).Count
-Write-Host " $cnt images ready in $Dest"
+Write-Host "✅  $cnt images ready in $Dest"
