@@ -1,17 +1,25 @@
 @echo off
-REM ============================================================
-REM  Builds (Release) with MSVC + NVCC and runs the demo batch
-REM ============================================================
+rem -------------------- run.bat (VS 2019 edition) --------------------
 
-echo === Configuring & building ===
+:: Make sure you are inside **x64 Native Tools Command Prompt for VS 2019**
+
+echo === Configuring ^& building ===
 cmake -S . -B build ^
-      -G "Visual Studio 17 2022" -A x64 ^
+      -G "Visual Studio 16 2019" -A x64 ^
       -DCMAKE_BUILD_TYPE=Release
-cmake --build build --config Release
+if errorlevel 1 (
+    echo CMake configure failed.  Aborting.
+    exit /b 1
+)
 
-echo.
+cmake --build build --config Release
+if errorlevel 1 (
+    echo Build failed.  Aborting.
+    exit /b 1
+)
+
 echo === Running demo on sample dataset ===
-IF NOT EXIST docs\execution-artifacts\before_after (
+if not exist docs\execution-artifacts\before_after (
     mkdir docs\execution-artifacts\before_after
 )
 
@@ -22,6 +30,5 @@ build\bin\batch_processor.exe ^
     | powershell -NoLogo -Command ^
         "Tee-Object -FilePath docs\execution-artifacts\log.txt"
 
-echo.
-echo ✅  Output images + log written to docs\execution-artifacts\
+echo Done.
 pause
