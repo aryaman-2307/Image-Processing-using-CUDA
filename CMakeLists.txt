@@ -15,13 +15,12 @@ add_executable(batch_processor
     src/img_utils.cu
 )
 
-find_package(CUDAToolkit REQUIRED COMPONENTS nppif nppc nppi)
+find_package(CUDAToolkit REQUIRED COMPONENTS nppif nppc)
 
 target_link_libraries(batch_processor
     PRIVATE
         CUDA::cudart
         CUDA::nppif
-        CUDA::nppi
         CUDA::nppc
 )
 
