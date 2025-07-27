@@ -21,8 +21,7 @@ target_link_libraries(batch_processor
     PRIVATE
         CUDA::cudart
         CUDA::nppif
-        CUDA::nppc
-)
+        CUDA::nppc)
 
 set_target_properties(batch_processor PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
